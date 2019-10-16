@@ -67,7 +67,8 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://zarkbruce.github.io/2019/10/16/interrupt/image1.png">
 <meta property="og:image" content="https://zarkbruce.github.io/2019/10/16/interrupt/isr.png">
-<meta property="og:updated_time" content="2019-10-16T08:21:01.432Z">
+<meta property="og:image" content="https://zarkbruce.github.io/2019/10/16/interrupt/interrupt.png">
+<meta property="og:updated_time" content="2019-10-16T08:29:27.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Interrupt">
 <meta name="twitter:description" content="问题引入　　我们可以考虑一个经典的执行I/O的程序，首先设备驱动(device driver)在设备控制器（device controller）里载入合适的寄存器（registers），设备控制器读取寄存器的内容来判断做何种操作。接着设备中的数据开始传输至它的局部缓冲区（local buffer),数据传输过程完成后，设备控制器开始将控制交付给操作系统的其他部分，除此之外，设备控制器还将返回状态信">
@@ -300,7 +301,7 @@
                 
               
 
-              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:21:01" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
+              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:29:27" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
             </span>
           
             
@@ -343,25 +344,17 @@
 interrupt request line, the CPU catches the interrupt and dispatches it to the
 interrupt handler, and the handler clears the interrupt by servicing the device.</p>
 </blockquote>
-![hardware of computer system](interrupt1/interrupt.png)　
-    在现代操作系统中，我们需要更为复杂的中断处理特性：
-1.在临界处理（critical processing）中推迟中断的能力。
-2.更高效的方式为设备派遣中断处理器
-3.多级中断，使操作系统可以辨别高、低优先级中断。
-　　在现代操作系统中，这三个中断处理特性由cpu和中断控制器硬件（interrupt-controller hardware)提供，如Programmble Interrupt Controller(PIC).PIC作为辅助中断硬件，它可以是外部的或者集成在芯片本身。PIC包含若干个中断请求线和一个输出中断线。中断请求线用来处理来自外部的中断，输出中断线则用来请求来自CPU的中断。<br>
-## 中断优先级
-　　硬件通过中断优先级（Interrupt Priority Level）来联系各个中断请求线。当前的处理器优先级存储在CPU寄存器中。如果当前处理器的优先级大于或等于中断的优先级，则忽略该中断。如果不是，处理器的优先级转变为和中短线的优先级相同，并将控制权转移给相应的中断处理器。当中断处理器完成操作时，处理器的优先级降低，被中断的活动重新开始执行。注意：中断处理进程可以被更高优先级的中断处理进程中断。因为中断服务程序和其它中断服务程序之间会相互干扰，所以最合适的方法来管理中断就是使所有中断更加透明。
-## 软件引起中断
-软件引起的中断可分为两类： <br>
-1.处理器本身的异常情况    <br>
-2.特殊指令执行时引发的中断 <br>
+
+<pre><code>在现代操作系统中，我们需要更为复杂的中断处理特性：</code></pre><p>1.在临界处理（critical processing）中推迟中断的能力。<br>2.更高效的方式为设备派遣中断处理器<br>3.多级中断，使操作系统可以辨别高、低优先级中断。<br>　　在现代操作系统中，这三个中断处理特性由cpu和中断控制器硬件（interrupt-controller hardware)提供，如Programmble Interrupt Controller(PIC).PIC作为辅助中断硬件，它可以是外部的或者集成在芯片本身。PIC包含若干个中断请求线和一个输出中断线。中断请求线用来处理来自外部的中断，输出中断线则用来请求来自CPU的中断。<br><br><img src="//ZarkBruce.github.io/2019/10/16/interrupt/interrupt.png" alt="hardware of computer system">　</p>
+<h2 id="中断优先级"><a href="#中断优先级" class="headerlink" title="中断优先级"></a>中断优先级</h2><p>　　硬件通过中断优先级（Interrupt Priority Level）来联系各个中断请求线。当前的处理器优先级存储在CPU寄存器中。如果当前处理器的优先级大于或等于中断的优先级，则忽略该中断。如果不是，处理器的优先级转变为和中短线的优先级相同，并将控制权转移给相应的中断处理器。当中断处理器完成操作时，处理器的优先级降低，被中断的活动重新开始执行。注意：中断处理进程可以被更高优先级的中断处理进程中断。因为中断服务程序和其它中断服务程序之间会相互干扰，所以最合适的方法来管理中断就是使所有中断更加透明。</p>
+<h2 id="软件引起中断"><a href="#软件引起中断" class="headerlink" title="软件引起中断"></a>软件引起中断</h2><p>软件引起的中断可分为两类： <br><br>1.处理器本身的异常情况    <br><br>2.特殊指令执行时引发的中断 <br></p>
 <p>  前者被称为异常（exception），用于错误（error）或者在线程执行时出现异常且不可在线程内处理的事件。例如，如果处理器的算术逻辑单元被命令取做一个数被0除的操作，就会产生divide-by-zero-exception，使计算机放弃这个计算并且显示一个错误信息。
 软件中断指令可以用来实现各种目的的系统访问（system call），例如设备驱动这一类低级系统软件。操作系统经常在和硬盘驱动交流来请求将要读或者将要写入硬盘的数据时使用软件中断（实现系统访问）。</p>
 　　操作系统中一种典型的中断利用就是编程一个计数器实现周期性中断。<br>
 <blockquote>
     <p> These periodic interrupts are normally handled by the context switching routine of the task scheduler to schedule threads according to their priorities. Another example of I/O interrupt is found when a disk interrupt signals the completion of a data transfer from or to the disk peripheral and a thread waiting to read or write a file starts up again.</p>
 </blockquote>
-## 中断的分类
+##  中断的分类
 中断可以分为以下几类：
 <ul>
 <li>Maskable interrupt (MI): a hardware interrupt that may be ignored by setting a bit in an interrupt mask register’s (IMR) bit-mask. A hardware interrupt that lacks an associated bit-mask is a non-maskable interrupt (NMI). An NMI interrupt can never be ignored. NMIs are used for the highest priority tasks such as timers,especially watchdog timers. MIs or NMIs can be used by I/O device controllers to signal operations such as write, read, status, error or other I/O operations.
@@ -615,7 +608,7 @@ Spurious interrupt: a hardware interrupt that is unwanted. They are typically ge
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题引入"><span class="nav-number">1.</span> <span class="nav-text">问题引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#综述"><span class="nav-number">2.</span> <span class="nav-text">综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题引入"><span class="nav-number">1.</span> <span class="nav-text">问题引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#综述"><span class="nav-number">2.</span> <span class="nav-text">综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中断优先级"><span class="nav-number">4.</span> <span class="nav-text">中断优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件引起中断"><span class="nav-number">5.</span> <span class="nav-text">软件引起中断</span></a></li></ol></div>
             
 
           </div>
