@@ -296,7 +296,7 @@
                 
               
 
-              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:44:58" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
+              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:52:43" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
             </span>
           
             
@@ -345,7 +345,7 @@ interrupt handler, and the handler clears the interrupt by servicing the device.
 3.多级中断，使操作系统可以辨别高、低优先级中断。
 　　在现代操作系统中，这三个中断处理特性由cpu和中断控制器硬件（interrupt-controller hardware)提供，如Programmble Interrupt Controller(PIC).PIC作为辅助中断硬件，它可以是外部的或者集成在芯片本身。PIC包含若干个中断请求线和一个输出中断线。中断请求线用来处理来自外部的中断，输出中断线则用来请求来自CPU的中断。<br>
 
-<p><img src="//ZarkBruce.github.io/2019/10/16/interrupt/interrupt.png" alt="hardware of computer system" title="interrupt">　</p>
+<p><img src="//ZarkBruce.github.io/2019/10/16/interrupt/interrupt.png" alt="hardware of computer system" title="hardware of interrupt mechanism">　</p>
 <h2 id="中断优先级"><a href="#中断优先级" class="headerlink" title="中断优先级"></a>中断优先级</h2><p>　　硬件通过中断优先级（Interrupt Priority Level）来联系各个中断请求线。当前的处理器优先级存储在CPU寄存器中。如果当前处理器的优先级大于或等于中断的优先级，则忽略该中断。如果不是，处理器的优先级转变为和中短线的优先级相同，并将控制权转移给相应的中断处理器。当中断处理器完成操作时，处理器的优先级降低，被中断的活动重新开始执行。注意：中断处理进程可以被更高优先级的中断处理进程中断。因为中断服务程序和其它中断服务程序之间会相互干扰，所以最合适的方法来管理中断就是使所有中断更加透明。</p>
 <h2 id="软件引起中断"><a href="#软件引起中断" class="headerlink" title="软件引起中断"></a>软件引起中断</h2><p>软件引起的中断可分为两类： <br><br>1.处理器本身的异常情况    <br><br>2.特殊指令执行时引发的中断 <br></p>
 <p>  前者被称为异常（exception），用于错误（error）或者在线程执行时出现异常且不可在线程内处理的事件。例如，如果处理器的算术逻辑单元被命令取做一个数被0除的操作，就会产生divide-by-zero-exception，使计算机放弃这个计算并且显示一个错误信息。
