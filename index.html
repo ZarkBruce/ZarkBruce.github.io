@@ -296,7 +296,7 @@
                 
               
 
-              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:37:45" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
+              <time title="Created: 2019-10-16 15:59:02 / Modified: 16:43:02" itemprop="dateCreated datePublished" datetime="2019-10-16T15:59:02+08:00">2019-10-16</time>
             </span>
           
             
@@ -340,9 +340,8 @@
 interrupt request line, the CPU catches the interrupt and dispatches it to the
 interrupt handler, and the handler clears the interrupt by servicing the device.</p>
 </blockquote>
-  在现代操作系统中，我们需要更为复杂的中断处理特性：
+  在现代操作系统中，我们需要更为复杂的中断处理特性：   
 1.在临界处理（critical processing）中推迟中断的能力。
-2.更高效的方式为设备派遣中断处理器
 3.多级中断，使操作系统可以辨别高、低优先级中断。
 　　在现代操作系统中，这三个中断处理特性由cpu和中断控制器硬件（interrupt-controller hardware)提供，如Programmble Interrupt Controller(PIC).PIC作为辅助中断硬件，它可以是外部的或者集成在芯片本身。PIC包含若干个中断请求线和一个输出中断线。中断请求线用来处理来自外部的中断，输出中断线则用来请求来自CPU的中断。<br>
 ![hardware of computer system](interrupt/interrupt.png "interrupt")　
