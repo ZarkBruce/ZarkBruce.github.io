@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ZarkBruce.github.io/"/>
-  <updated>2019-11-30T06:44:45.489Z</updated>
+  <updated>2019-12-01T08:13:41.062Z</updated>
   <id>https://ZarkBruce.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Operating System:internals and design principles hw1</title>
+    <link href="https://ZarkBruce.github.io/2019/12/01/osidp-hw1/"/>
+    <id>https://ZarkBruce.github.io/2019/12/01/osidp-hw1/</id>
+    <published>2019-12-01T08:11:13.000Z</published>
+    <updated>2019-12-01T08:13:41.062Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Review-Questions"><a href="#Review-Questions" class="headerlink" title="Review Questions"></a>Review Questions</h2><blockquote><p>1.1 List and briefly define the four main elements of a computer. </p></blockquote><ul><li>Processor<br>:Control the operation of computer and perform data processing function.</li><li>Memory<br>:Stores data and programs.</li><li>I/O Modules<br>:Move data between the computer and its external environment.</li><li>System Bus<br>:Provide communications among processors,main memory and I/O modules.</li></ul><blockquote><p>1.2 Define the two main categories of processor registers.   </p></blockquote><ul><li>MAR(Memory Address Register)<br>:which specifies the address of next read or write.</li><li>MBR(Memory Buffer Register)<br>:which contains the data to be written into memory or which receives the data read from memory</li></ul><blockquote><p>1.3 In general terms, what are the four distinct actions that a machine instruction can specify? </p></blockquote><ul><li>Processor-Memory<br>:transfer data between processor and main memory.</li><li>Processor-I/O module<br>:transfer data between processor and I/O module.</li><li>Control<br>:control the operation the processor performs.</li><li>Data Processing<br>:perform some arithematic or logic processing.</li></ul><blockquote><p>1.4 What is an interrupt?    </p></blockquote><p>An interrupt is triggered by  software or hardare to stop the current execution of processor,and then the processor<br>transfer control to the interrupt service routine to do some other works until it finished.It’s used to promote processor resource utilization.</p><blockquote><p>1.5 How can multiple interrupts be serviced by setting priorities?      </p></blockquote><p>By the mechanism that the interrupt of higher-priorit can cause a lower-priority interrupt service routine interrupted.</p><blockquote><p>1.6 What characteristics are observed while going up the memory hierarchy?</p></blockquote><ul><li>Decreasing capacity</li><li>Decreasing access time</li><li>Increasing cost per bit</li><li>Increasing fruquency of access to the  memory by the processor</li></ul><blockquote><p>1.7 What are the trade-offs that determine the size of the cache memory? </p></blockquote><p>Speed and cost of the cache.</p><blockquote><p>1.8 What is the difference between a multiprocessor and a multicore system?</p></blockquote><p> A multiprocessor system contains more than one cpu,allowing them to work in parallel.It’s called <strong>SMP</strong> or Symmertic Multiprocessing.<br> A multicore system has multiple execution cores on one cpu.This is called <strong>CMP</strong> or Chip Microprocessor.</p><blockquote><p> 1.9 What is the distinction between spatial locality and temporal locality?  </p></blockquote><ul><li>Spatial locality refers to the tendency of execution to involve a number of memory locations that are clustered.</li><li>Tempory locality refers to  the tendency  for a processor to access memory locations that have been used recently.</li></ul><blockquote><p>1.10 In general, what are the strategies for exploiting spatial locality and temporal locality?</p></blockquote><p>Spatial locality is generally exploited by using larger cache block and by incorporating prefetching mechanism(fetching items anticipated use) into the cache control logic.Temporal locality is exploited by keeping recently used instruction or data values in cache memory and by exploiting a cache hierarchy.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Review-Questions&quot;&gt;&lt;a href=&quot;#Review-Questions&quot; class=&quot;headerlink&quot; title=&quot;Review Questions&quot;&gt;&lt;/a&gt;Review Questions&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;1
+      
+    
+    </summary>
+    
+      <category term="Operating System" scheme="https://ZarkBruce.github.io/categories/Operating-System/"/>
+    
+    
+      <category term="OS(internals and design principles)" scheme="https://ZarkBruce.github.io/tags/OS-internals-and-design-principles/"/>
+    
+  </entry>
   
   <entry>
     <title>Interrupt</title>
