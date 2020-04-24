@@ -87,6 +87,22 @@
   };
 </script>
 
+    <script>
+  function GetUrlRelativePath() {
+    var url = document.location.toString(); //获取当前链接
+    var arrUrl = url.split("//");
+    var start = arrUrl[1].indexOf("/");
+    var relUrl = arrUrl[1].substring(start); //截取从start开始到结尾的所有字符
+    if(relUrl.indexOf("?") != -1){
+      relUrl = relUrl.split("?")[0];
+    }
+      return relUrl;
+  }
+  var relUrl = GetUrlRelativePath()
+  if (relUrl.indexOf('/books/')>=0) {  //判断是否为豆瓣读书页面
+    document.write('<meta name="referrer" content="never" />');
+  }
+</script>
   <title>阅读 | Research Space</title>
   
 
@@ -434,7 +450,7 @@
     <div id="hexo-douban-item1">
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s10305420.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s10305420.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/3674397/"> Procrastination</a></div>
         <div class="hexo-douban-meta">
@@ -473,7 +489,7 @@
     <div id="hexo-douban-item3">
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s2812100.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s2812100.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/2349930/"> 秘密花园</a></div>
         <div class="hexo-douban-meta">
@@ -491,7 +507,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s28061240.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s28061240.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/26324497/"> 支付战争</a></div>
         <div class="hexo-douban-meta">
@@ -509,7 +525,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s29444747.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s29444747.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/27038668/"> 香港人的政治心态</a></div>
         <div class="hexo-douban-meta">
@@ -527,7 +543,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s29003343.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s29003343.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/26858119/"> 轰炸东京</a></div>
         <div class="hexo-douban-meta">
@@ -545,7 +561,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s6776117.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s6776117.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/1068912/"> 中国文化的深层结构</a></div>
         <div class="hexo-douban-meta">
@@ -563,7 +579,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s4471523.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s4471523.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/5252677/"> 幸福了吗?</a></div>
         <div class="hexo-douban-meta">
@@ -581,7 +597,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s4599357.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img1.doubanio.com/view/subject/s/public/s4599357.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/5404058/"> 痛并快乐着</a></div>
         <div class="hexo-douban-meta">
@@ -599,7 +615,7 @@
 
         
         <div class="hexo-douban-item">
-    <div class="hexo-douban-picture"><img src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s29053580.jpg" referrerPolicy="no-referrer" /></div>
+    <div class="hexo-douban-picture"><img class="nofancybox" src="/assets/douban-loading.gif" data-src="https://img3.doubanio.com/view/subject/s/public/s29053580.jpg" referrerPolicy="no-referrer" /></div>
     <div class="hexo-douban-info">
         <div class="hexo-douban-title"><a target="_blank" href="https://book.douban.com/subject/4913064/"> 活着</a></div>
         <div class="hexo-douban-meta">
