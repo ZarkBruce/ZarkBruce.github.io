@@ -501,7 +501,7 @@
       
           
             <h2 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h2><p>　　我们可以考虑一个经典的执行I/O的程序，首先设备驱动(device driver)在设备控制器（device controller）里载入合适的寄存器（registers），设备控制器读取寄存器的内容来判断做何种操作。接着设备中的数据开始传输至它的局部缓冲区（local buffer),数据传输过程完成后，设备控制器开始将控制交付给操作系统的其他部分，除此之外，设备控制器还将返回状态信息（status infoamtion)给设备驱动器（例如读操作已完成），那么设备控制器是如何提醒设备驱动该操作是否完成的呢？这就是通过中断来完成的。</p>
-<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>　　硬件可以在任何时间向CPU发送信号触发一次中断，通常是通过系统总线（在一个计算机系统中有很多的总线，系统总线是大部分组件之间的主要传输路径）。软件可以通过system call(also  called monitor call)触发中断。当CPU被中断时，它会停下当前工作并转移操作至一个固定的位置，这个位置通常包含了中断服务程序（interrupt service routine）的起始地址(starting address),之后中断服务程序开始执行，完成执行操作后，CPU重新开始被中断的计算操作。<br><br>下图是一个执行输出程序的中断时间轴。过程描述：1.开始时用户程序(user program)处于运行态,I/O设备处于空闲态（idle）2.I/O request发出后经过一小段时间I/O设备开始传输—&gt;传输完成 ，I/O设备恢复空闲态。3.中断信号发出，同时I/O interrupt processing开始运行直至中断处理完成，用户程序恢复执行被中断的操作。<br><img src="//ZarkBruce.github.io/2019/10/16/interrupt/image1.png" alt="单个执行输出程序的中断操作时间轴" title="interrupt timeline of a single output routine"></p>
+<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>　　硬件可以在任何时间向CPU发送信号触发一次中断，通常是通过系统总线（在一个计算机系统中有很多的总线，系统总线是大部分组件之间的主要传输路径）。软件可以通过system call(also  called monitor call)触发中断。当CPU被中断时，它会停下当前工作并转移操作至一个固定的位置，这个位置通常包含了中断服务程序（interrupt service routine）的起始地址(starting address),之后中断服务程序开始执行，完成执行操作后，CPU重新开始被中断的计算操作。&lt;/br&gt;<br>下图是一个执行输出程序的中断时间轴。过程描述：1.开始时用户程序(user program)处于运行态,I/O设备处于空闲态（idle）2.I/O request发出后经过一小段时间I/O设备开始传输—&gt;传输完成 ，I/O设备恢复空闲态。3.中断信号发出，同时I/O interrupt processing开始运行直至中断处理完成，用户程序恢复执行被中断的操作。<br><img src="//ZarkBruce.github.io/2019/10/16/interrupt/image1.png" alt="单个执行输出程序的中断操作时间轴" title="interrupt timeline of a single output routine"></p>
 <p><img src="//ZarkBruce.github.io/2019/10/16/interrupt/isr.png" alt="中断服务程序" title="interrupt service routine"><br>　　中断在计算机系统里会频繁的出现，因此中断被触发后应在很短的时间内得到处理。一个包含若干个指向中断程序的指针表格可以提升中断被处理的速度。中断程序通过指针表格间接访问，而不通过其它中间程序来访问。通常来说，指针表格存储在低内存（low memory)位置（前100或者临近前100的位置），这种程序存储着各种设备中断服务程序的地址。这个地址的数组或者中断向量（interrupt vector)可通过唯一设备号来索引，以给设备提供中断服务程序的地址。Windows或者UNIX操作系统就是采用这种方式来处理中断的。<br><br>　　中断体系必须保存一切被中断的状态信息，在中断处理完毕之后必须恢复之前的状态。如果中断程序需要修改处理器状态，例如，修改寄存器的值，那么就必须要清晰地保存当前状态，并且在返回之前恢复该状态。在中断处理完毕之后，保存的返回地址被重新载入程序计数器，被中断的计算恢复，中断就好像没有发生过一样。<br></p>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>　　CPU中有一种在执行每条指令后进行感知的中断请求线（interrupt-request　line），当CPU检测到控制器通过中断请求线上发出了一个信号，它会读取一个中断号（interrupt　number),以该中断号为索引值访问中断矢量（interrupt　vector）并跳转至中断处理程序（interrupt-handler routine）【 a set of memory locations (interrupt vectors) associated with each interrupt request line that holds the start address of the interrupt handling routine.】，然后CPU在索引值绑定的地址开始运行，中断处理器会存储操作中任何将要改变的状态，并决定中断的目标，执行必要的处理，执行状态恢复（state　restore),在中断发生前运行return_from_interrupt指令返回cpu运行状态（execution state）。</p>
 <blockquote>
@@ -514,9 +514,14 @@ interrupt handler, and the handler clears the interrupt by servicing the device.
 2.多级中断，使操作系统可以辨别高、低优先级中断。<br>
 　　在现代操作系统中，这三个中断处理特性由cpu和中断控制器硬件（interrupt-controller hardware)提供，如Programmble Interrupt Controller(PIC).PIC作为辅助中断硬件，它可以是外部的或者集成在芯片本身。PIC包含若干个中断请求线和一个输出中断线。中断请求线用来处理来自外部的中断，输出中断线则用来请求来自CPU的中断。<br>
 
-<p><img src="//ZarkBruce.github.io/2019/10/16/interrupt/interrupt.png" alt="hardware of computer system" title="hardware of interrupt mechanism">　</p>
-<h2 id="中断优先级"><a href="#中断优先级" class="headerlink" title="中断优先级"></a>中断优先级</h2><p>　　硬件通过中断优先级（Interrupt Priority Level）来联系各个中断请求线。当前的处理器优先级存储在CPU寄存器中。如果当前处理器的优先级大于或等于中断的优先级，则忽略该中断。如果不是，处理器的优先级转变为和中短线的优先级相同，并将控制权转移给相应的中断处理器。当中断处理器完成操作时，处理器的优先级降低，被中断的活动重新开始执行。注意：中断处理进程可以被更高优先级的中断处理进程中断。因为中断服务程序和其它中断服务程序之间会相互干扰，所以最合适的方法来管理中断就是使所有中断更加透明。</p>
-<h2 id="软件引起中断"><a href="#软件引起中断" class="headerlink" title="软件引起中断"></a>软件引起中断</h2><p>软件引起的中断可分为两类： <br><br>1.处理器本身的异常情况    <br><br>2.特殊指令执行时引发的中断 <br></p>
+![hardware of computer system](interrupt/interrupt.png "hardware of interrupt mechanism")　
+
+##  中断优先级
+　　硬件通过中断优先级（Interrupt Priority Level）来联系各个中断请求线。当前的处理器优先级存储在CPU寄存器中。如果当前处理器的优先级大于或等于中断的优先级，则忽略该中断。如果不是，处理器的优先级转变为和中短线的优先级相同，并将控制权转移给相应的中断处理器。当中断处理器完成操作时，处理器的优先级降低，被中断的活动重新开始执行。注意：中断处理进程可以被更高优先级的中断处理进程中断。因为中断服务程序和其它中断服务程序之间会相互干扰，所以最合适的方法来管理中断就是使所有中断更加透明。
+##  软件引起中断
+软件引起的中断可分为两类： <br>
+1.处理器本身的异常情况    <br>
+2.特殊指令执行时引发的中断 <br>
 <p>  前者被称为异常（exception），用于错误（error）或者在线程执行时出现异常且不可在线程内处理的事件。例如，如果处理器的算术逻辑单元被命令取做一个数被0除的操作，就会产生divide-by-zero-exception，使计算机放弃这个计算并且显示一个错误信息。
 软件中断指令可以用来实现各种目的的系统访问（system call），例如设备驱动这一类低级系统软件。操作系统经常在和硬盘驱动交流来请求将要读或者将要写入硬盘的数据时使用软件中断（实现系统访问）。</p>
 　　操作系统中一种典型的中断利用就是编程一个计数器实现周期性中断。<br>
@@ -654,58 +659,29 @@ Spurious interrupt: a hardware interrupt that is unwanted. They are typically ge
 <li>若L命名为线性表，则一般表示L=（a1,a2,.....ai,ai+1,...,an)</li>
 </ul>
 
-<h2 id="线性表的九种基本操作"><a href="#线性表的九种基本操作" class="headerlink" title="线性表的九种基本操作"></a>线性表的九种基本操作</h2><p>1.InitList(&amp;L):初始化表，构造一个空的线性表 <br><br>2.DestoryList(&amp;L):销毁操作，销毁线性表，并释放线性表所占用的内存空间<br><br>3.LocateElem(L,e):按值查找，在表L中查找给定关键字值e的元素，返回查找到的第一个元素<br><br>4.GetElem(L,i):按位查找，获取表第i个位置的元素<br><br>5.ListInsert(&amp;L,i,e):插入操作，在线性表L中的第i个位置上插入指定元素e(规定前插）<br><br>6.ListDelete(&amp;L,i,&amp;e):删除操作，删除表L中第i个位置的元素，并用e返回删除元素的值。<br><br>7.PrintList(L):输出操作，按前后顺序输出线性表的各个元素<br><br>8.Empty(L):判空操作，若L为空表则返回TRUE否则返回FALSE<br><br>9.Length(L):求表长返回线性表L的长度，即L中数据元素的个数。<br></p>
-<h2 id="顺序表"><a href="#顺序表" class="headerlink" title="顺序表"></a>顺序表</h2><ul>
-<li>线性表的顺序存储又称顺序表</li>
-<li>一组地址连续存放的存储单元依次存放线性表的各个元素，从而使逻辑上相邻的元素在物理位置上也保持相邻（逻辑顺序与物理顺序相同）</li>
-<li>通常用数组来实现顺序表，它们之间存在很多不同点</li>
-1.数组的下标从0开始，线性表的下标从1开始。<br>
-2.数组的容量不可扩充，顺序表的容量可增加<br>
-3.数组可以是多维的，线性表只能是一维的<br>
-<li>顺序表可实现随机存取（Loc(A)+sizeof(ElemType),Loc(A)+2*sizeof(ElemType)...)</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数组静态分配</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Maxsize 50</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType data[Maxsize];<span class="comment">//存放顺序表中元素的数组</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的长度</span></span><br><span class="line">&#125;sqlist;</span><br></pre></td></tr></table></figure>
-
+<h2 id="线性表的九种基本操作"><a href="#线性表的九种基本操作" class="headerlink" title="线性表的九种基本操作"></a>线性表的九种基本操作</h2><p>1.InitList(&amp;L):初始化表，构造一个空的线性表 &lt;/br&gt;<br>2.DestoryList(&amp;L):销毁操作，销毁线性表，并释放线性表所占用的内存空间&lt;/br&gt;<br>3.LocateElem(L,e):按值查找，在表L中查找给定关键字值e的元素，返回查找到的第一个元素&lt;/br&gt;<br>4.GetElem(L,i):按位查找，获取表第i个位置的元素&lt;/br&gt;<br>5.ListInsert(&amp;L,i,e):插入操作，在线性表L中的第i个位置上插入指定元素e(规定前插）&lt;/br&gt;<br>6.ListDelete(&amp;L,i,&amp;e):删除操作，删除表L中第i个位置的元素，并用e返回删除元素的值。&lt;/br&gt;<br>7.PrintList(L):输出操作，按前后顺序输出线性表的各个元素&lt;/br&gt;<br>8.Empty(L):判空操作，若L为空表则返回TRUE否则返回FALSE&lt;/br&gt;<br>9.Length(L):求表长返回线性表L的长度，即L中数据元素的个数。&lt;/br&gt;</p>
+<h2 id="顺序表"><a href="#顺序表" class="headerlink" title="顺序表"></a>顺序表</h2><p><ul></ul></p>
+<p><li>线性表的顺序存储又称顺序表</li></p>
+<p><li>一组地址连续存放的存储单元依次存放线性表的各个元素，从而使逻辑上相邻的元素在物理位置上也保持相邻（逻辑顺序与物理顺序相同）</li></p>
+<p><li>通常用数组来实现顺序表，它们之间存在很多不同点</li><br>1.数组的下标从0开始，线性表的下标从1开始。&lt;/br&gt;<br>2.数组的容量不可扩充，顺序表的容量可增加&lt;/br&gt;<br>3.数组可以是多维的，线性表只能是一维的&lt;/br&gt;</p>
+<p><li>顺序表可实现随机存取（Loc(A)+sizeof(ElemType),Loc(A)+2*sizeof(ElemType)...)</li><br>&lt;/ul&gt;<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数组静态分配</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Maxsize 50</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType data[Maxsize];<span class="comment">//存放顺序表中元素的数组</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的长度</span></span><br><span class="line">&#125;sqlist;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Maxsize 50</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType *data;<span class="comment">//指针表示顺序表的首地址，即第一个数据元素的地址</span></span><br><span class="line">    <span class="keyword">int</span> length;<span class="comment">//顺序表的长度</span></span><br><span class="line">    &#125;sqlist;</span><br><span class="line">    <span class="comment">//动态分配语句</span></span><br><span class="line">    <span class="comment">//L.data=(ElemType*)malloc(sizeof(ElemType)*Initsize)</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="顺序表的基本操作"><a href="#顺序表的基本操作" class="headerlink" title="顺序表的基本操作"></a>顺序表的基本操作</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义顺序表及其初始化操作</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxSize 100</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    ElemType *data;</span><br><span class="line">    <span class="keyword">int</span> length;   </span><br><span class="line">&#125;sqlist</span><br><span class="line"></span><br><span class="line"><span class="function">Status <span class="title">InitList</span><span class="params">(sqlist &amp;L)</span></span>&#123;</span><br><span class="line">L.data=(ElemType*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(ElemType)*InitSize) ;</span><br><span class="line"><span class="keyword">if</span> (L.data==<span class="literal">NULL</span>)</span><br><span class="line"><span class="built_in">exit</span>(OVERFLOW); <span class="comment">//存储分配失败</span></span><br><span class="line">L.length=<span class="number">0</span>;   <span class="comment">//空表的长度为0</span></span><br><span class="line">L.listsize=InitSize; <span class="comment">//初始存储容量</span></span><br><span class="line"><span class="keyword">return</span> OK;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//顺序表的插入操作</span></span><br><span class="line">ListInsert(sqlist &amp;L,<span class="keyword">int</span> i,ElemType e)&#123;</span><br><span class="line">    <span class="comment">//判断插入位置的合法性</span></span><br><span class="line">    <span class="keyword">if</span>(i&lt;<span class="number">1</span>||i&gt;=L.length+<span class="number">1</span>) <span class="keyword">return</span> ERROR;<span class="comment">//顺序表的数据元素是连续的</span></span><br><span class="line">    <span class="keyword">if</span>(L.length&gt;=Maxsize) <span class="keyword">return</span> ERROR;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=L.length;j&gt;=i;j-- )</span><br><span class="line">    L.data[j]=L.data[j<span class="number">-1</span>];</span><br><span class="line">    L.data[i<span class="number">-1</span>]=e;</span><br><span class="line">    L.length++;<span class="comment">//线性表的长度加一</span></span><br><span class="line">    <span class="keyword">return</span> ok;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/顺序表的删除操作</span><br><span class="line">ListDelete(sqlist &amp;L,<span class="keyword">int</span> i,ElemType &amp;e)&#123;</span><br><span class="line">    <span class="comment">//判断删除位置的合法性</span></span><br><span class="line">  <span class="keyword">if</span>(i&lt;<span class="number">1</span>||i&gt;L.length) <span class="keyword">return</span> ERROR;</span><br><span class="line">  e=L.data[i<span class="number">-1</span>]<span class="comment">//将删除的元素存放在引用变量e中</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&lt;L.length;j++)</span><br><span class="line">  L.data[j<span class="number">-1</span>]=L.data[j];</span><br><span class="line">  L.length--;<span class="comment">//线性表的长度减一，清空了原顺序表的最后一个元素</span></span><br><span class="line">  <span class="keyword">return</span> OK; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//顺序表的按值查找操作</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">LocateElem</span><span class="params">(sqlist L,ElemType e)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;L.length;i++)</span><br><span class="line">  <span class="keyword">if</span>(L.data[i]==e)</span><br><span class="line">  <span class="keyword">return</span> i+<span class="number">1</span>;</span><br><span class="line"> <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//查找失败  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h2><p><ul></ul></p>
+<p><li>线性表的链式存储又称为单链表</li></p>
+<p><li>通过一组任意的存储单元来存储线性表中的数据元素</li></p>
+<p><li>通过指针来实现线性逻辑关系</li></p>
+<p><li>单链表不可以随机存取，只可以进行顺序存取</li></p>
+<p><li>结点：数据域+指针域</li></p>
+<p><li>头指针与头节点的区别</li><br>1.无论是否引入头节点，头指针所指向的一定是链表的第一个节点 &lt;/br&gt;</p>
+<ol>
+<li>头节点是带头节点链表的第一个节点，其数据域内通常不存储数据&lt;/br&gt;<br></li><li>引入头节点的原因</li><br>1.处理操作起来方便 例如：对在第一元素结点前插入结点和删除第一结点起操作与其它结点的操作就统一了&lt;/br&gt;<br>2.无论链表是否为空，其头指针是指向头结点的非空指针，因此空表和非空表的处理也就统一了&lt;/br&gt;<br>&lt;/ul&gt;<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span>&#123;</span></span><br><span class="line">    ElemType data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;LNode,*LinkList;</span><br></pre></td></tr></table></figure>
 
-<h2 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h2><ul>
-<li>线性表的链式存储又称为单链表</li>
-<li>通过一组任意的存储单元来存储线性表中的数据元素</li>
-<li>通过指针来实现线性逻辑关系</li>
-<li>单链表不可以随机存取，只可以进行顺序存取</li>
-<li>结点：数据域+指针域</li>
-<li>头指针与头节点的区别</li>
-1.无论是否引入头节点，头指针所指向的一定是链表的第一个节点 <br>
-2. 头节点是带头节点链表的第一个节点，其数据域内通常不存储数据<br>
-<li>引入头节点的原因</li>
-1.处理操作起来方便 例如：对在第一元素结点前插入结点和删除第一结点起操作与其它结点的操作就统一了<br>
-2.无论链表是否为空，其头指针是指向头结点的非空指针，因此空表和非空表的处理也就统一了<br>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span>&#123;</span></span><br><span class="line">    ElemType data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">LNode</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;LNode,*LinkList;</span><br></pre></td></tr></table></figure>
-
-<pre><code class="c"><span class="comment">//头插法建立单链表</span>
-   <span class="function">LinkList <span class="title">List_HeadInsert</span><span class="params">(LinkList &amp;L)</span></span>{
-       LNode *s;<span class="keyword">int</span> x;
-      L=(LinkList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LNode));
-      L-&gt;<span class="literal">NULL</span>;
-      <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;x);
-      <span class="keyword">while</span>(x!=<span class="number">9999</span>){
-        s=(LNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(LNode)) ;
-        s-&gt;data=x;
-        s-&gt;next=L-&gt;next;
-        L-&gt;next=s;
-        <span class="built_in">scanf</span>(%d,&amp;x);
-      }
-      <span class="keyword">return</span>  L;
-   }</code></pre>
+</ol>
+<p>~~~c<br> //头插法建立单链表<br>    LinkList List_HeadInsert(LinkList &amp;L){<br>        LNode <em>s;int x;<br>       L=(LinkList)malloc(sizeof(LNode));<br>       L-&gt;NULL;<br>       scanf(“%d”,&amp;x);<br>       while(x!=9999){<br>         s=(LNode</em>)malloc(sizeof(LNode)) ;<br>         s-&gt;data=x;<br>         s-&gt;next=L-&gt;next;<br>         L-&gt;next=s;<br>         scanf(%d,&amp;x);<br>       }<br>       return  L;<br>    }</p>
 
           
         
@@ -782,7 +758,7 @@ Spurious interrupt: a hardware interrupt that is unwanted. They are typically ge
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-12-01 16:25:14" itemprop="dateModified" datetime="2019-12-01T16:25:14+08:00">2019-12-01</time>
+                <time title="Modified: 2020-04-24 13:23:40" itemprop="dateModified" datetime="2020-04-24T13:23:40+08:00">2020-04-24</time>
               </span>
             
           
@@ -801,17 +777,17 @@ Spurious interrupt: a hardware interrupt that is unwanted. They are typically ge
           
             <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start-123"><a href="#Quick-Start-123" class="headerlink" title="Quick Start 123"></a>Quick Start 123</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
 <p>！<a href="/images/test.png">tip</a><br>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<p>$f(x,y,z) = 3y^2z \left( 3+\frac{7x+5}{1+y^2} \right)$</p>
+<div class="pdf" target="hello-world/a.pdf" height></div>
+<p>$\alpha$</p>
+<p>$\beta$<br>$\gamma$<br>$\delta$</p>
 
           
         
@@ -1114,6 +1090,31 @@ Spurious interrupt: a hardware interrupt that is unwanted. They are typically ge
 
 
 
+<script>
+if ($('body').find('div.pdf').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      $('body').find('div.pdf').each(function(i, o) {
+        PDFObject.embed($(o).attr('target'), $(o), {
+          pdfOpenParams: {
+            navpanes: 0,
+            toolbar: 0,
+            statusbar: 0,
+            pagemode: 'thumbs',
+            view: 'FitH'
+          },
+          PDFJS_URL: '/lib/pdf/web/viewer.html',
+          height: $(o).attr('height') || '500px'
+        });
+      });
+    },
+  });
+}
+</script>
 
 
 
