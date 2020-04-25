@@ -9,6 +9,8 @@ NexT.utils = {
     $('.post-body img')
       .each(function() {
         var $image = $(this);
+        /*添加下面这行，如果class定义了nofancybox直接return 修改日期2020/04/25 修复手机浏览器端图书图片显示问题*/
+        if ($(this).hasClass('nofancybox')) return;
         var imageTitle = $image.attr('title') || $image.attr('alt');
         var $imageWrapLink = $image.parent('a');
 
