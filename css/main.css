@@ -248,7 +248,7 @@ blockquote {
   border-left: 4px solid #ddd;
 }
 blockquote p {
-  font-family: STKaiti, KaiTi, 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: STKaiti, KaiTi, '楷体', 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 blockquote cite::before {
   content: "-";
@@ -1190,7 +1190,7 @@ pre .javascript .function {
 .post-body {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: '楷体', 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 .post-body span.exturl .fa {
   font-size: 0.875em;
@@ -1330,7 +1330,7 @@ pre .javascript .function {
 .posts-expand .post-meta {
   margin: 3px 0 60px 0;
   color: #999;
-  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: '楷体', 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   text-align: center;
 }
 .posts-expand .post-meta .post-description {
@@ -1567,7 +1567,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffff65;
+  background: #fff;
 }
 .feed-link,
 .chat {
