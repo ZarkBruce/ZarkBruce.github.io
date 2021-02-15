@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ZarkBruce.github.io/"/>
-  <updated>2019-12-01T08:22:14.679Z</updated>
+  <updated>2021-02-15T04:01:22.965Z</updated>
   <id>https://ZarkBruce.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计算机网络实验记录</title>
+    <link href="https://ZarkBruce.github.io/2021/02/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/"/>
+    <id>https://ZarkBruce.github.io/2021/02/15/计算机网络实验记录/</id>
+    <published>2021-02-15T03:58:16.000Z</published>
+    <updated>2021-02-15T04:01:22.965Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>计算机网络实验，项目网址：<a href="http://www.michaelbobo.top/ComputerNnetworksLabs/" target="_blank" rel="noopener">http://www.michaelbobo.top/ComputerNnetworksLabs/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;项目地址&quot;&gt;&lt;a href=&quot;#项目地址&quot; class=&quot;headerlink&quot; title=&quot;项目地址&quot;&gt;&lt;/a&gt;项目地址&lt;/h2&gt;&lt;p&gt;计算机网络实验，项目网址：&lt;a href=&quot;http://www.michaelbobo.top/ComputerNnetw
+      
+    
+    </summary>
+    
+      <category term="Computer Network" scheme="https://ZarkBruce.github.io/categories/Computer-Network/"/>
+    
+    
+      <category term="cisco packet tracer" scheme="https://ZarkBruce.github.io/tags/cisco-packet-tracer/"/>
+    
+  </entry>
   
   <entry>
     <title>Operating System:internals and design principles hw1</title>
