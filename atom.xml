@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ZarkBruce.github.io/"/>
-  <updated>2021-02-15T04:33:59.587Z</updated>
+  <updated>2021-07-01T01:44:57.507Z</updated>
   <id>https://ZarkBruce.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>kaggle</title>
+    <link href="https://ZarkBruce.github.io/2021/07/01/kaggle/"/>
+    <id>https://ZarkBruce.github.io/2021/07/01/kaggle/</id>
+    <published>2021-07-01T01:43:43.000Z</published>
+    <updated>2021-07-01T01:44:57.507Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="linux使用kaggle-api下载数据集"><a href="#linux使用kaggle-api下载数据集" class="headerlink" title="linux使用kaggle api下载数据集"></a>linux使用kaggle api下载数据集</h2><h3 id="1-linux上安装kaggle"><a href="#1-linux上安装kaggle" class="headerlink" title="1.  linux上安装kaggle"></a>1.  linux上安装kaggle</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install kaggle</span><br></pre></td></tr></table></figure><h3 id="2-kaggle上创建新的api-token"><a href="#2-kaggle上创建新的api-token" class="headerlink" title="2. kaggle上创建新的api token"></a>2. kaggle上创建新的api token</h3><p>kaggle-&gt;account-&gt;api<br><img src="https://img-blog.csdnimg.cn/20210630104712947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JvbmpvdXIwMDE=,size_16,color_FFFFFF,t_70#pic_center" alt="create new api token"><br>下载kaggle.json文件，并拷贝到自己的linux用户目录下的隐藏文件夹(~/.kaggle)</p><h3 id="3-使kaggle-api-key生效"><a href="#3-使kaggle-api-key生效" class="headerlink" title="3. 使kaggle api key生效"></a>3. 使kaggle api key生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 600 ~/.kaggle/kaggle.json</span><br></pre></td></tr></table></figure><h3 id="4-下载数据集"><a href="#4-下载数据集" class="headerlink" title="4.下载数据集"></a>4.下载数据集</h3><p><img src="https://img-blog.csdnimg.cn/20210630105719547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JvbmpvdXIwMDE=,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>点击new notebook右边的按钮，选择<strong>copy api command</strong>,复制后在linux运行即可下载。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;linux使用kaggle-api下载数据集&quot;&gt;&lt;a href=&quot;#linux使用kaggle-api下载数据集&quot; class=&quot;headerlink&quot; title=&quot;linux使用kaggle api下载数据集&quot;&gt;&lt;/a&gt;linux使用kaggle api下载数
+      
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="https://ZarkBruce.github.io/categories/Deep-Learning/"/>
+    
+    
+      <category term="kaggle" scheme="https://ZarkBruce.github.io/tags/kaggle/"/>
+    
+  </entry>
   
   <entry>
     <title>计算机网络实验记录</title>
