@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[kaggle]]></title>
+    <title><![CDATA[linux使用kaggle api下载数据集]]></title>
     <url>%2F2021%2F07%2F01%2Fkaggle%2F</url>
-    <content type="text"><![CDATA[linux使用kaggle api下载数据集1. linux上安装kaggle1pip3 install kaggle 2. kaggle上创建新的api tokenkaggle-&gt;account-&gt;api下载kaggle.json文件，并拷贝到自己的linux用户目录下的隐藏文件夹(~/.kaggle) 3. 使kaggle api key生效1chmod 600 ~/.kaggle/kaggle.json 4.下载数据集点击new notebook右边的按钮，选择copy api command,复制后在linux运行即可下载。]]></content>
+    <content type="text"><![CDATA[1. linux上安装kaggle1pip3 install kaggle 2. kaggle上创建新的api tokenkaggle-&gt;account-&gt;api下载kaggle.json文件，并拷贝到自己的linux用户目录下的隐藏文件夹(~/.kaggle) 3. 使kaggle api key生效1chmod 600 ~/.kaggle/kaggle.json 4.下载数据集点击new notebook右边的按钮，选择copy api command,复制后在linux运行即可下载。]]></content>
       <categories>
         <category>Deep Learning</category>
       </categories>
